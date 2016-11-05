@@ -19,10 +19,17 @@ function setDays(){
     var today = new Date();
     for(var i = 0; i < app.config.days; i++){
         var curDay = addDays(today,i);
-        var giorno = weekday[curDay.getDay()];
-        if(i === 0) giorno = 'Oggi';
-        if(i === 1) giorno = 'Domani'; 
-        $('#day'+(i+1)).text(giorno);
+        var giorno = $('<a/>');
+        giorno.text(weekday[curDay.getDay()]);
+        giorno.attr('href', '#container-'+(i+1));
+        if(i === 0){
+            giorno.addClass("active");
+            giorno.text('Oggi');
+        }
+        if(i === 1){
+            giorno.text('Domani');
+        }
+        $('#day-'+(i+1)).html(giorno);
     }
 }
 
