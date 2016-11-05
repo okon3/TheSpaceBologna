@@ -1,9 +1,36 @@
+var weekday = new Array(7);
+weekday[0]=  "Domenica";
+weekday[1] = "Lunedì";
+weekday[2] = "Martedì";
+weekday[3] = "Mercoledì";
+weekday[4] = "Giovedì";
+weekday[5] = "Venerdì";
+weekday[6] = "Sabato";
+
 (function($){
     $(function(){
         $('.button-collapse').sideNav();
+        setDays();
         loadFilms();
     });
 })(jQuery);
+
+function setDays(){
+    var today = new Date();
+    for(var i = 0; i < app.config.days; i++){
+        var curDay = addDays(today,i);
+        var giorno = weekday[curDay.getDay()];
+        if(i === 0) giorno = 'Oggi';
+        if(i === 1) giorno = 'Domani'; 
+        $('#day'+(i+1)).text(giorno);
+    }
+}
+
+function addDays(date, days) {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+}
 
 function loadFilms(){
     //Request movies
