@@ -45,6 +45,7 @@ function loadFilms(){
         url: app.config.UrlMovies,
         dataType: "json",
         success: function (response) {
+            app._programmazione = response.programmazione; //copy the real programmazione
             app.lengthProgrammazione = response.programmazione.length > app.config.days ? app.config.days : response.programmazione.length;
             var _codMovies = [];
             for(var i = 0; i < app.lengthProgrammazione; i++){
@@ -92,7 +93,14 @@ function loadFilms(){
                             film.duration = _film[0].durata;
                             film.genres = _film[0].categories;
                             film.imageURL = 'http://cdn.thespacecinema.it/portal/rest/jcr/repository/collaboration' + _film[0].path + '/illustration';
-
+                            film.times = [];
+                            for(var j = 0; j < app.config.days; j++){
+                                var tempProg = app._programmazione[j].filter(function(item, pos) {return item.codFilm === codMovie;});
+                                film.times[j] = $.map(tempProg, function (el, indexOrKey) {
+                                    return el.eventTime;
+                                });
+                            }
+                            
                             app.movies[codMovie] = film;
                         }
                     }
@@ -119,6 +127,7 @@ var app = new Vue({
         },
         codMovies : [],
         movies : {},
+        _programmazione : [],
         programmazione : [],
         loaded: false
     }
@@ -141,7 +150,7 @@ Vue.component('movie-card-desktop', {
             '				</ul>'+
             '			</div>'+
             '			<div class="card-action center-align">'+
-            
+            '				<div class="chip blue white-text" v-for="time in movie.times[day]">{{time}}</div>'+
             '			</div>'+
             '		</div>'+
             '	</div>'+
@@ -165,7 +174,7 @@ Vue.component('movie-card-mobile', {
             '				</ul>'+
             '			</div>'+
             '			<div class="card-action center-align">'+
-            '				<div class="chip blue white-text" v-for="time in movie.times">{{time}}</div>'+
+            '				<div class="chip blue white-text" v-for="time in movie.times[day]">{{time}}</div>'+
             '			</div>'+
             '		</div>'+
             '	</div>'+
