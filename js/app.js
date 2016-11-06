@@ -123,44 +123,33 @@ var app = new Vue({
         config : {
             UrlMovies : 'http://cdn.thespacecinema.it/rest/programmazione/3/get',
             UrlMoviesInfo : 'http://cdn.thespacecinema.it/rest/film/films-by-universalCodes',
-            days : 4 //Number of days (today, tommorrow, after tomorrow, after after tomorrow)
+            days : 4, //Number of days (today, tommorrow, after tomorrow, after after tomorrow)
+            sorting : [
+                function(codMovie1, codMovie2){ //Sort by title
+                    app.getMovieByCod();
+                },
+                function(){ //Sort by rating
+
+                }
+            ]
         },
         codMovies : [],
         movies : {},
         _programmazione : [],
         programmazione : [],
         loaded: false
+    },
+    methods : {
+        getMovieByCod : function(codMovie){
+            return 'aa';
+        }
     }
 })
 
-Vue.component('movie-card-desktop', {
-  props: ['movie', 'day'],
-  template: '<div class="col l6 hide-on-med-and-down">'+
-            '	<div class="card horizontal hoverable ">'+
-            '		<div class="card-image">'+
-            '			<img v-bind:src="movie.imageURL">'+
-            '		</div>'+
-            '		<div class="card-stacked">'+
-            '			<div class="card-content">'+
-            '				<span class="card-title">{{movie.title}}</span>'+
-            '				<ul class="fa-ul">'+
-            '					<li><i class="fa-li fa fa-genderless"></i> <strong>Genere</strong> : {{movie.genres.join(\', \')}} </li>'+
-            '					<li><i class="fa-li fa fa-film"></i> <strong>Regia</strong> : {{movie.director}}</li>'+
-            '					<li><i class="fa-li fa fa-play"></i> <strong>Durata</strong> : {{movie.duration}}</li>'+
-            '				</ul>'+
-            '			</div>'+
-            '			<div class="card-action center-align">'+
-            '				<div class="chip blue white-text" v-for="time in movie.times[day]">{{time}}</div>'+
-            '			</div>'+
-            '		</div>'+
-            '	</div>'+
-            '</div>'
-})
-
-Vue.component('movie-card-mobile', {
-  props: ['movie', 'day'],
-  template: '<div class="col s12 m6 hide-on-large-only">'+
-            '	<div class="card hoverable ">'+
+Vue.component('movie-card', {
+  props: ['movie', 'day', 'isDesktop'],
+  template: '<div class="col" v-bind:class="{\'hide-on-med-and-down\':isDesktop, l6:isDesktop,\'hide-on-large-only\':!isDesktop, s12:!isDesktop, m6:!isDesktop}">'+ 
+            '	<div class="card hoverable" v-bind:class="{horizontal:isDesktop}">'+
             '		<div class="card-image">'+
             '			<img v-bind:src="movie.imageURL">'+
             '		</div>'+
