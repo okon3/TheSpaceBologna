@@ -131,6 +131,7 @@ var app = new Vue({
             sortIndex : 0,
             sorts : [
                 {
+                    title: 'Ordine alfabetico',
                     icon : 'fa-sort-alpha-asc',
                     function : function(codMovie1, codMovie2){ //Sort by title asc
                         var title1 = app.movies[codMovie1].title;
@@ -141,6 +142,7 @@ var app = new Vue({
                     }
                 },
                 {
+                    title: 'Ordine alfabetico inverso',
                     icon : 'fa-sort-alpha-desc',
                     function : function(codMovie1, codMovie2){ //Sort by title desc
                         var title1 = app.movies[codMovie1].title;
@@ -160,19 +162,23 @@ var app = new Vue({
     },
     methods : {
         changeSort : function(event){
-            app.config.sortIndex = (app.config.sortIndex + 1 ) % (app.config.sorts.length);
-            app.sortMovies();
+            debugger;
+            this.config.sortIndex = (this.config.sortIndex + 1 ) % (this.config.sorts.length);
+            this.sortMovies();
             $('.fixed-action-btn').closeFAB();
         },
         sortMovies : function(){
-            for(var i = 0 ; i < app.programmazione.length; i++){
-                app.programmazione[i].sort(app.config.sorts[app.config.sortIndex].function);
+            for(var i = 0 ; i < this.programmazione.length; i++){
+                this.programmazione[i].sort(this.config.sorts[this.config.sortIndex].function);
             }
         }
     },
     computed : {
         sortIcon : function(){
-            return app.config.sorts[(app.config.sortIndex + 1 ) % (app.config.sorts.length)].icon;
+            return this.config.sorts[(this.config.sortIndex + 1 ) % (this.config.sorts.length)].icon;
+        },
+        sortTitle : function(){
+            return this.config.sorts[(this.config.sortIndex + 1 ) % (this.config.sorts.length)].title;
         }
     }
 })
