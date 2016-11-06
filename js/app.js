@@ -128,6 +128,7 @@ var app = new Vue({
             UrlMovies : 'http://cdn.thespacecinema.it/rest/programmazione/3/get',
             UrlMoviesInfo : 'http://cdn.thespacecinema.it/rest/film/films-by-universalCodes',
             days : 4, //Number of days (today, tommorrow, after tomorrow, after after tomorrow)
+            listMode : false,
             sortIndex : 0,
             sorts : [
                 {
@@ -161,8 +162,10 @@ var app = new Vue({
         loaded: false
     },
     methods : {
+        changeListMode : function(){
+            this.config.listMode = !this.config.listMode;
+        },
         changeSort : function(event){
-            debugger;
             this.config.sortIndex = (this.config.sortIndex + 1 ) % (this.config.sorts.length);
             this.sortMovies();
             $('.fixed-action-btn').closeFAB();
@@ -187,17 +190,18 @@ Vue.component('movie-card', {
   props: ['movie', 'day', 'isDesktop'],
   template: '<div class="col" v-bind:class="{\'hide-on-med-and-down\':isDesktop, l6:isDesktop,\'hide-on-large-only\':!isDesktop, s12:!isDesktop, m6:!isDesktop}">'+ 
             '	<div class="card hoverable" v-bind:class="{horizontal:isDesktop}">'+
-            '		<div class="card-image">'+
+            '		<div class="card-image" v-if="!app.config.listMode">'+
             '			<img v-bind:src="movie.imageURL">'+
             '		</div>'+
             '		<div class="card-stacked">'+
             '			<div class="card-content">'+
             '				<span class="card-title">{{movie.title}}</span>'+
-            '				<ul class="fa-ul">'+
+            '				<ul class="fa-ul" v-if="!app.config.listMode">'+
             '					<li><i class="fa-li fa fa-genderless"></i> <strong>Genere</strong> : {{movie.genres.join(\', \')}} </li>'+
             '					<li><i class="fa-li fa fa-film"></i> <strong>Regia</strong> : {{movie.director}}</li>'+
             '					<li><i class="fa-li fa fa-play"></i> <strong>Durata</strong> : {{movie.duration}}</li>'+
             '				</ul>'+
+            '               <p v-if="app.config.listMode"><strong>Genere</strong> : {{movie.genres.join(\', \')}} | <strong>Regia</strong> : {{movie.director}} | <strong>Durata</strong> : {{movie.duration}}</p>'+
             '			</div>'+
             '			<div class="card-action center-align">'+
             '				<div class="chip blue white-text" v-for="time in movie.times[day]">{{time}}</div>'+
