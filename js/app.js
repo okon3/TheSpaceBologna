@@ -128,21 +128,27 @@ var app = new Vue({
             UrlMovies : 'http://cdn.thespacecinema.it/rest/programmazione/3/get',
             UrlMoviesInfo : 'http://cdn.thespacecinema.it/rest/film/films-by-universalCodes',
             days : 4, //Number of days (today, tommorrow, after tomorrow, after after tomorrow)
-            sorting : 0,
-            sortingFunctions : [
-                function(codMovie1, codMovie2){ //Sort by title asc
-                    var title1 = app.movies[codMovie1].title;
-                    var title2 = app.movies[codMovie2].title;
-                    if(title1 < title2) return -1
-                    if(title1 > title2) return 1
-                    return 0;
+            sortIndex : 0,
+            sorts : [
+                {
+                    icon : 'fa-sort-alpha-asc',
+                    function : function(codMovie1, codMovie2){ //Sort by title asc
+                        var title1 = app.movies[codMovie1].title;
+                        var title2 = app.movies[codMovie2].title;
+                        if(title1 < title2) return -1
+                        if(title1 > title2) return 1
+                        return 0;
+                    }
                 },
-                function(codMovie1, codMovie2){ //Sort by title desc
-                    var title1 = app.movies[codMovie1].title;
-                    var title2 = app.movies[codMovie2].title;
-                    if(title1 < title2) return 1
-                    if(title1 > title2) return -1
-                    return 0;
+                {
+                    icon : 'fa-sort-alpha-desc',
+                    function : function(codMovie1, codMovie2){ //Sort by title desc
+                        var title1 = app.movies[codMovie1].title;
+                        var title2 = app.movies[codMovie2].title;
+                        if(title1 < title2) return 1
+                        if(title1 > title2) return -1
+                        return 0;
+                    }
                 }
             ]
         },
@@ -154,13 +160,19 @@ var app = new Vue({
     },
     methods : {
         changeSort : function(event){
-            app.config.sorting = (app.config.sorting + 1 ) % (app.config.sortingFunctions.length);
+            app.config.sortIndex = (app.config.sortIndex + 1 ) % (app.config.sorts.length);
             app.sortMovies();
+            $('.fixed-action-btn').closeFAB();
         },
         sortMovies : function(){
             for(var i = 0 ; i < app.programmazione.length; i++){
-                app.programmazione[i].sort(app.config.sortingFunctions[app.config.sorting]);
+                app.programmazione[i].sort(app.config.sorts[app.config.sortIndex].function);
             }
+        }
+    },
+    computed : {
+        sortIcon : function(){
+            return app.config.sorts[(app.config.sortIndex + 1 ) % (app.config.sorts.length)].icon;
         }
     }
 })
