@@ -104,6 +104,10 @@ function loadFilms(){
                             app.movies[codMovie] = film;
                         }
                     }
+
+                    //Sort films by default
+                    app.sortMovies();
+
                     app.loaded = true;
                 },
                 error: function(response){
@@ -124,12 +128,21 @@ var app = new Vue({
             UrlMovies : 'http://cdn.thespacecinema.it/rest/programmazione/3/get',
             UrlMoviesInfo : 'http://cdn.thespacecinema.it/rest/film/films-by-universalCodes',
             days : 4, //Number of days (today, tommorrow, after tomorrow, after after tomorrow)
-            sorting : [
-                function(codMovie1, codMovie2){ //Sort by title
-                    app.getMovieByCod();
+            sorting : 0,
+            sortingFunctions : [
+                function(codMovie1, codMovie2){ //Sort by title asc
+                    var title1 = app.movies[codMovie1].title;
+                    var title2 = app.movies[codMovie2].title;
+                    if(title1 < title2) return -1
+                    if(title1 > title2) return 1
+                    return 0;
                 },
-                function(){ //Sort by rating
-
+                function(codMovie1, codMovie2){ //Sort by title desc
+                    var title1 = app.movies[codMovie1].title;
+                    var title2 = app.movies[codMovie2].title;
+                    if(title1 < title2) return 1
+                    if(title1 > title2) return -1
+                    return 0;
                 }
             ]
         },
@@ -140,8 +153,14 @@ var app = new Vue({
         loaded: false
     },
     methods : {
-        getMovieByCod : function(codMovie){
-            return 'aa';
+        changeSort : function(event){
+            app.config.sorting = (app.config.sorting + 1 ) % (app.config.sortingFunctions.length);
+            app.sortMovies();
+        },
+        sortMovies : function(){
+            for(var i = 0 ; i < app.programmazione.length; i++){
+                app.programmazione[i].sort(app.config.sortingFunctions[app.config.sorting]);
+            }
         }
     }
 })

@@ -76,17 +76,17 @@
 					<movie-card v-for="movie in programmazione[3]" v-bind:movie="movies[movie]" v-bind:day="3" v-bind:is-desktop="false"></movie-card>
 				</div>
 			</div>
+
+			<div class="fixed-action-btn">
+				<a class="btn-floating btn-large orange darken-2">
+					<i class="material-icons">menu</i>
+				</a>
+				<ul>
+					<li><a class="btn-floating green waves-effect waves-light" v-on:click="changeSort"><i class="material-icons">sort_by_alpha</i></a></li>
+					<li><a class="btn-floating blue waves-effect waves-light" ><i class="material-icons">view_list</i></a></li>
+				</ul>
+			</div>
 		</main>
-		
-		<div class="fixed-action-btn">
-			<a class="btn-floating btn-large orange darken-2">
-				<i class="material-icons">menu</i>
-			</a>
-			<ul>
-				<li><a class="btn-floating green"><i class="material-icons">sort_by_alpha</i></a></li>
-				<li><a class="btn-floating blue"><i class="material-icons">view_list</i></a></li>
-			</ul>
-		</div>
 
 		<footer class="page-footer orange darken-2">
 			<div class="footer-copyright">
