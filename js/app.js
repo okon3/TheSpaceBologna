@@ -144,7 +144,7 @@ Vue.component('movie-card-desktop', {
             '			<div class="card-content">'+
             '				<span class="card-title">{{movie.title}}</span>'+
             '				<ul class="fa-ul">'+
-            '					<li><i class="fa-li fa fa-genderless"></i> <strong>Genere</strong> : {{movie.genres.join(\',\')}} </li>'+
+            '					<li><i class="fa-li fa fa-genderless"></i> <strong>Genere</strong> : {{movie.genres.join(\', \')}} </li>'+
             '					<li><i class="fa-li fa fa-film"></i> <strong>Regia</strong> : {{movie.director}}</li>'+
             '					<li><i class="fa-li fa fa-play"></i> <strong>Durata</strong> : {{movie.duration}}</li>'+
             '				</ul>'+
@@ -168,7 +168,7 @@ Vue.component('movie-card-mobile', {
             '			<div class="card-content">'+
             '				<span class="card-title">{{movie.title}}</span>'+
             '				<ul class="fa-ul">'+
-            '					<li><i class="fa-li fa fa-genderless"></i> <strong>Genere</strong> : {{movie.genres.join(\',\')}} </li>'+
+            '					<li><i class="fa-li fa fa-genderless"></i> <strong>Genere</strong> : {{movie.genres.join(\', \')}} </li>'+
             '					<li><i class="fa-li fa fa-film"></i> <strong>Regia</strong> : {{movie.director}}</li>'+
             '					<li><i class="fa-li fa fa-play"></i> <strong>Durata</strong> : {{movie.duration}}</li>'+
             '				</ul>'+
