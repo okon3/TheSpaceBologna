@@ -19,7 +19,7 @@ weekday[6] = "Sabato";
 //Set days accordingly
 function setDays(){
     var today = new Date();
-    for(var i = 1; i < app.config.days; i++){
+    for(var i = 1; i <= app.config.days; i++){
         var curDay = addDays(today,i-1);
         var giorno = $('<a/>');
         giorno.text(weekday[curDay.getDay()]);
@@ -111,6 +111,9 @@ function loadFilms(){
                     app.sortMovies();
 
                     app.loaded = true;
+
+                    //Force reload tabs
+                    $('ul.tabs').tabs();
                 },
                 error: function(response){
                     console.log(response);

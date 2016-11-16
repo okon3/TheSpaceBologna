@@ -1,7 +1,6 @@
 --  Check seats
---  Filler when there are no movies to show
 -   About page
--   remove console errors
+-   remove console errors on first load
 -   favicon
 
 -   View trailer
