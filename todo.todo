@@ -1,6 +1,11 @@
- - View trailer
- - More than 4 days
- - Change cinema
- - About page
- - Scrollfire to load images
- - fix FAB on MObile (Chrome)
+--  Check seats
+--  Filler when there are no movies to show
+-   About page
+-   remove console errors
+-   favicon
+
+-   View trailer
+-   More than 4 days
+-   Change cinema
+-   Scrollfire to load images
+-   chrome splash webapp
