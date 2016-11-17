@@ -99,7 +99,13 @@ function loadFilms(){
                             for(var j = 0; j < app.config.days; j++){
                                 var tempProg = app._programmazione[j].filter(function(item, pos) {return item.codFilm === codMovie;});
                                 film.times[j] = $.map(tempProg, function (el, indexOrKey) {
-                                    return el.eventTime;
+                                    var time = {};
+                                    time.time = el.eventTime;
+                                    time.iddata = el.eventDate;
+                                    time.idsala = el.codSala;
+                                    time.idevento = el.codEvento;
+                                    time.idfilm = el.codFilm;
+                                    return time;
                                 });
                             }
                             
@@ -132,6 +138,8 @@ var app = new Vue({
         config : {
             UrlMovies : 'http://cdn.thespacecinema.it/rest/programmazione/3/get',
             UrlMoviesInfo : 'http://cdn.thespacecinema.it/rest/film/films-by-universalCodes',
+            UrlOccupancyInfo : 'http://ecomm.thespacecinema.it/web/gateway', 
+            idCinema : 3,
             days : 4, //Number of days (today, tommorrow, after tomorrow, after after tomorrow)
             isFABActive : false,
             listMode : false,
@@ -179,6 +187,43 @@ var app = new Vue({
             $('.fixed-action-btn').closeFAB();
             this.config.isFABActive = false;
         },
+        checkOccupancy : function(time,event){
+            var params = {};
+            params.service = 115;
+            params.iddata = time.iddata;
+            params.idcinema = this.config.idCinema;
+            params.idsala = time.idsala;
+            params.idevento = time.idevento;
+            params.idfilm = time.idfilm;
+            params.tipoop = 'ACQUISTO';
+            params.modpag = 0;
+            var source = event.target || event.srcElement;
+            $(source).append(' <i class="fa fa-spinner fa-pulse fa-fw"></i>');
+            $.get({
+                url: 'https://crossorigin.me/' + app.config.UrlOccupancyInfo,
+                dataType: "html",
+                data : params,
+                success: function (response) {
+                    var free = $(response).find('.Mappa_Poltrona_Libera').length;
+                    var full = $(response).find('.Mappa_Poltrona_Occupata').length;
+                    var total = free + full;
+                    var ratio = Math.round(full / total * 100 * 100 ) / 100;
+                    var ratioStr = ratio + '%'; 
+                    console.log('free: ' + free + ' full: ' + full + ' total: ' + total + ' ratio: ' + ratio);
+
+                    var colorClass = 'chip light-green darken-2 white-text';
+                    if (ratio > 50) colorClass = 'chip yellow darken-3 white-text';
+                    if (ratio > 75) colorClass = 'chip red darken-3 white-text';
+                    if (ratio > 90) colorClass = 'chip grey darken-4 white-text';;
+
+                    $(source).removeClass().addClass(colorClass);
+                    $(source).find('i').remove();
+                },
+                error: function(response){
+                    console.log(response);
+                }
+            });
+        },
         generateContainerID : function(n){
             return "container-" + n;
         },
@@ -225,9 +270,14 @@ Vue.component('movie-card', {
             '               <p v-if="app.config.listMode"><strong>Genere</strong> : {{movie.genres.join(\', \')}} | <strong>Regia</strong> : {{movie.director}} | <strong>Durata</strong> : {{movie.duration}}</p>'+
             '			</div>'+
             '			<div class="card-action center-align">'+
-            '				<div class="chip blue white-text" v-for="time in movie.times[day]">{{time}}</div>'+
+            '				<div class="chip blue white-text" v-for="time in movie.times[day]" @click="checkOccupancy(time,$event)">{{time.time}}</div>'+
             '			</div>'+
             '		</div>'+
             '	</div>'+
-            '</div>'
+            '</div>',
+    methods : {
+        checkOccupancy : function(time,event){
+            app.checkOccupancy(time,event);
+        }
+    }
 })
