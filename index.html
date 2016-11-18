@@ -49,17 +49,19 @@
 				</div>
 			</div>
 
-			<div v-for="n in config.days" :id.prop="generateContainerID(n)">
-				<div class="row">
-					<div v-if="programmazione[n-1].length === 0" class="col s12">
-						<h4 class="center-align">Nessun film in programmazione per il giorno selezionato.</h4>
+			<template v-else>	
+				<div v-for="n in config.days" :id.prop="generateContainerID(n)">
+					<div class="row">
+						<div v-if="programmazione[n-1].length === 0" class="col s12">
+							<h4 class="center-align">Nessun film in programmazione per il giorno selezionato.</h4>
+						</div>
+						<template v-else>
+							<movie-card v-for="movie in programmazione[n-1]" :movie="movies[movie]" :day="n-1" :is-desktop="true"></movie-card>
+							<!--<movie-card v-for="movie in programmazione[n-1]" :movie="movies[movie]" :day="n-1" :is-desktop="false"></movie-card>-->
+						</template>
 					</div>
-					<template v-else>
-						<movie-card v-for="movie in programmazione[n-1]" :movie="movies[movie]" :day="n-1" :is-desktop="true"></movie-card>
-						<movie-card v-for="movie in programmazione[n-1]" :movie="movies[movie]" :day="n-1" :is-desktop="false"></movie-card>
-					</template>
 				</div>
-			</div>
+			</template>
 
 			<div class="fixed-action-btn click-to-toggle">
 				<a class="btn-floating btn-large orange darken-2" @click="handleFAB">
