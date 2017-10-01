@@ -1,0 +1,28 @@
+/* Overrides */
+
+.card .card-content .card-title {
+    line-height: 20px;
+}
+
+.card .card-title {
+    font-size: 20px;
+    font-weight: 400;
+}
+
+
+/* Custom Css */
+
+/* Sticky Footer */
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+.card.horizontal .card-image img{
+    max-height: 400px;
+}
